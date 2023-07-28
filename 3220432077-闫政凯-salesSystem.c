@@ -1,0 +1,567 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+#define MAX_SALESMEN 20
+#define MAX_PRODUCTS 30
+#define MAX_NAME_LENGTH 50
+#define MAX_SALSESRECORD 100
+
+//定义结构体存储数据
+struct salesmen{
+    char name[MAX_NAME_LENGTH];
+    char id[5];
+    char gender[10];
+    char education[MAX_NAME_LENGTH];
+    //定义销售额变量
+    int salesNum;
+}Salesmen[MAX_SALESMEN];
+
+struct products{
+    char id[5];
+    char name[MAX_NAME_LENGTH];
+    int price;
+    int stock;
+    //定义销售额变量
+    int salesNum;
+}Product[MAX_PRODUCTS];
+
+struct salesRecords{
+    char date[MAX_NAME_LENGTH];
+    char saleID[5];
+    char salesmanID[5];
+    char productID[5];
+    int quantity;
+}SalesRecord[MAX_SALSESRECORD];
+
+//定义记录数量的变量
+int num_salesmen = 0;
+int num_product = 0;
+int num_salesrecord = 0;
+
+//展示菜单信息
+void displayMenu(){
+    printf("\n-----销售系统菜单-----\n");
+    printf("1.添加销售人员信息\n");
+    printf("2.展示销售人员信息\n");
+    printf("3.添加产品信息\n");
+    printf("4.展示产品信息\n");
+    printf("5.添加销售信息\n");
+    printf("6.展示销售信息\n");
+    printf("7.存入文件\n");
+    printf("8.读取文件\n");
+    printf("9.输出每个销售员的总销售额、每种产品的总销售额\n");
+    printf("10.按销售额对销售员进行升序排序，输出排序结果\n");
+    printf("11.按销售额对产品进行降序排序，输出排序结果\n");
+    printf("0.结束\n");
+    printf("请输入你的选项：");
+
+}
+
+//添加销售人员信息
+void addSalesmenInfo(){
+
+    if(num_salesmen>20){
+        printf("人员已达上限，不可添加！\n");
+        return;
+    }
+
+    //创建一个新的销售人员对象
+    struct salesmen new_salesmen;
+
+    //输入id
+    printf("请输入销售人员编号(E00N)：");
+    scanf("%s",new_salesmen.id);
+
+    //输入姓名
+    printf("请输入销售人员姓名：");
+    scanf("%s",new_salesmen.name);
+
+    //输入性别
+    printf("请输入销售人员性别：");
+    scanf("%s",new_salesmen.gender);
+
+    //输入学历
+    printf("请输入销售人员学历：");
+    scanf("%s",new_salesmen.education);
+
+    //输入该人员销售额
+    printf("请输入该人员的销售额：");
+    scanf("%d",&new_salesmen.salesNum);
+
+    //将信息存入数组
+    Salesmen[num_salesmen++] = new_salesmen;
+
+    //提示人员信息存储成功
+    printf("销售人员信息存储成功！\n");
+
+}
+
+//展示销售人员信息
+void showSalesmenInfo(){
+
+    if(num_salesmen==0){
+        printf("无销售人员信息！\n");
+        return;
+    }
+
+    //循环遍历输出
+    printf("销售人员信息：\n");
+    for(int i=0;i<num_salesmen;i++){
+        printf("编号：%s\n",Salesmen[i].id);
+        printf("姓名：%s\n",Salesmen[i].name);
+        printf("性别：%s\n",Salesmen[i].gender);
+        printf("学历：%s\n",Salesmen[i].education);
+        printf("销售额：%d\n\n",Salesmen[i].salesNum);
+    }
+
+    //printf("销售人员信息打印成功！\n");
+}
+
+//添加产品信息
+void addProductInfo(){     
+    if(num_product>30){
+        printf("产品已达上限，不可添加！\n");
+        return;
+    }
+
+    //创建一个新的产品对象
+    struct products new_product;
+
+    //输入id
+    printf("请输入产品编号(P00M)：");
+    scanf("%s",new_product.id);
+
+    //输入名称
+    printf("请输入产品名称：");
+    scanf("%s",new_product.name);
+
+    //输入价格
+    printf("请输入产品价格：");
+    scanf("%d",&new_product.price);
+
+    //输入库存量
+    printf("请输入产品库存量：");
+    scanf("%d",&new_product.stock);
+
+    //输入产品销售量
+    printf("请输入产品销售量：");
+    scanf("%d",&new_product.salesNum);
+
+    //将信息存入数组
+    Product[num_product++] = new_product;
+
+    //提示产品信息存储成功
+    printf("产品信息存储成功！\n");
+}
+
+//展示产品信息
+void showProductInfo(){
+    if(num_product==0){
+        printf("无产品信息！\n");
+        return;
+    }
+
+    //循环遍历输出
+    printf("产品信息：\n");
+    for(int i=0;i<num_product;i++){
+        printf("编号：%s\n",Product[i].id);
+        printf("名称：%s\n",Product[i].name);
+        printf("价格：%d\n",Product[i].price);
+        printf("库存量：%d\n",Product[i].stock);
+        printf("销售量：%d\n\n",Product[i].salesNum);
+    }
+
+    //printf("产品信息打印成功！\n");
+}
+
+//添加销售记录信息
+void addSalesRecordsInfo(){
+    if(num_salesrecord>MAX_SALSESRECORD){
+        printf("销售记录已达上限，不可添加！\n");
+        return;
+    }
+
+    //创建一个新的销售记录对象
+    struct salesRecords new_salesRecord;
+
+    //输入销售日期
+    printf("请输入销售日期：");
+    scanf("%s",new_salesRecord.date);
+
+    //输入销售编号
+    printf("请输入销售编号：");
+    scanf("%s",new_salesRecord.saleID);
+
+    //输入销售人员编号
+    int flag1=0;
+    int num1;//定义一个记录该销售人员序号的变量
+    while(flag1==0){
+        printf("请输入销售人员编号：");
+        scanf("%s",new_salesRecord.salesmanID);
+        //判断是否有该销售人员
+        for(int i=0;i<num_salesmen;i++){
+            if(strcmp(Salesmen[i].id,new_salesRecord.salesmanID)==0){
+                num1=i;
+                flag1=1;
+                break;
+            }
+        }
+        if(flag1==0){
+            printf("对不起，未找到该销售人员。\n");
+        }
+    }
+    
+
+    //输入销售产品编号
+    int flag2=0;
+    int num2;//定义一个记录该产品序号的变量
+    while(flag2==0){
+        printf("请输入产品编号：");
+        scanf("%s",new_salesRecord.productID);
+        //判断是否有该产品
+        for(int i=0;i<num_product;i++){
+            if(strcmp(Product[i].id,new_salesRecord.productID)==0){
+                num2=i;
+                flag2=1;
+                break;
+            }
+        }
+        if(flag2==0){
+            printf("对不起，未找到该产品。\n");
+        }
+
+    }
+    
+    //输入销售数量
+    printf("请输入销售数量：");
+    scanf("%d",&new_salesRecord.quantity);
+    //销售人员的销售额变量和产品的销售额变量和库存量也随之改变
+    Salesmen[num1].salesNum +=new_salesRecord.quantity;
+    Product[num2].salesNum +=new_salesRecord.quantity;
+    Product[num2].stock -=new_salesRecord.quantity;
+
+    //将信息存入数组
+    SalesRecord[num_salesrecord++] = new_salesRecord;
+
+    //提示销售信息存储成功
+    printf("销售信息存储成功！\n");
+}
+
+//展示销售记录信息
+void showSalesRecordsInfo(){
+    if(num_salesrecord==0){
+        printf("无销售信息！\n");
+        return;
+    }
+
+    //循环遍历输出
+    printf("销售信息：\n");
+    for(int i=0;i<num_salesrecord;i++){
+        printf("销售日期：%s\n",SalesRecord[i].date);
+        printf("销售编号：%s\n",SalesRecord[i].saleID);
+        printf("销售人员编号：%s\n",SalesRecord[i].salesmanID);
+        printf("产品编号：%s\n",SalesRecord[i].productID);
+        printf("销售数量：%d\n\n",SalesRecord[i].quantity);
+    }
+
+    //printf("销售信息打印成功！\n");     
+}
+
+//将销售人员信息保存进文件
+void saveMenToFile(){
+
+    //创建文件
+    FILE *file = fopen("salesmen.txt","w");
+    if(file==NULL){
+        printf("文件保存失败！\n");
+        return;
+    }
+
+    //写入文件
+    fprintf(file,"编号  姓名  性别  学历  销售额\n");
+    for(int i=0;i<num_salesmen;i++){
+        fprintf(file,"%s  %s  %s  %s  %d\n",Salesmen[i].id,Salesmen[i].name,Salesmen[i].gender,
+                                            Salesmen[i].education,Salesmen[i].salesNum);
+    }
+
+    //关闭文件
+    fclose(file);
+    //printf("文件保存成功！\n");
+
+}
+
+//将产品信息保存进文件
+void saveProductToFile(){
+
+    //创建文件
+    FILE *file = fopen("product.txt","w");
+    if(file==NULL){
+        printf("文件保存失败！\n");
+        return;
+    }
+
+    //写入文件
+    fprintf(file,"编号  名称  价格  库存量  销售量\n");
+    for(int i=0;i<num_product;i++){
+        fprintf(file,"%s  %s  %d  %d  %d\n",Product[i].id,Product[i].name,Product[i].price,
+                                            Product[i].stock,Product[i].salesNum);
+    }
+
+    //关闭文件
+    fclose(file);
+    //printf("文件保存成功！\n");
+}
+
+//将销售记录信息保存进文件
+void saveRecordToFile(){
+
+    //创建文件
+    FILE *file = fopen("salesRecord.txt","w");
+    if(file==NULL){
+        printf("文件保存失败！\n");
+        return;
+    }
+
+    //写入文件
+    fprintf(file,"销售日期  销售编号  销售人员编号  产品编号  销售数量\n");
+    for(int i=0;i<num_salesrecord;i++){
+        fprintf(file,"%s  %s  %s  %s  %d\n",SalesRecord[i].date,SalesRecord[i].saleID,SalesRecord[i].salesmanID,
+                                            SalesRecord[i].productID,SalesRecord[i].quantity);
+    }
+
+    //关闭文件
+    fclose(file);
+    //printf("文件保存成功！\n");
+}
+
+//存入文件总函数
+void saveToFile(){
+
+    saveMenToFile();
+    saveProductToFile();
+    saveRecordToFile();
+
+    printf("文件保存成功！\n");
+}
+
+//用于读取文件
+void addSalesmen(char* id,char* name,char* gender,char* education,int salesNum){
+
+    //创建新对象
+    struct salesmen temp_salesman;
+
+    //将值赋给对象
+    strcpy(temp_salesman.id,id);
+    strcpy(temp_salesman.name,name);
+    strcpy(temp_salesman.gender,gender);
+    strcpy(temp_salesman.education,education);
+    temp_salesman.salesNum = salesNum;
+
+    //存入数组
+    Salesmen[num_salesmen++] = temp_salesman;
+
+}
+
+//用于读取文件
+void addProduct(char* id,char* name,int price,int stock,int salesNum){
+
+    //创建新对象
+    struct products temp_product;
+
+    //将值赋给对象
+    strcpy(temp_product.id,id);
+    strcpy(temp_product.name,name);
+    temp_product.price = price;
+    temp_product.stock = stock;
+    temp_product.salesNum = salesNum;
+
+    //存入数组
+    Product[num_product++] = temp_product;
+
+}
+
+//用于读取文件
+void addSalesRecord(char* date,char* saleID,char* salesmanID,char* productID,int quantity){
+
+    //创建新对象
+    struct salesRecords temp_salesRecord;
+
+    //将值赋给对象
+    strcpy(temp_salesRecord.date,date);
+    strcpy(temp_salesRecord.saleID,saleID);
+    strcpy(temp_salesRecord.salesmanID,salesmanID);
+    strcpy(temp_salesRecord.productID,productID);
+    temp_salesRecord.quantity = quantity;
+
+    //存入数组
+    SalesRecord[num_salesrecord++] = temp_salesRecord;
+
+}
+
+//文件读取
+void readFromFile(){
+
+    //打开文件
+    FILE *file1 = fopen("salesmen.txt","r");
+    FILE *file2 = fopen("product.txt","r");
+    FILE *file3 = fopen("salesRecord.txt","r");
+    if(file1==NULL){
+        printf("文件打开失败！\n");
+        return;
+    }
+    if(file2==NULL){
+        printf("文件打开失败！\n");
+        return;
+    }
+    if(file3==NULL){
+        printf("文件打开失败！\n");
+        return;
+    }
+
+    //定义销售人员信息变量
+    char name[MAX_NAME_LENGTH];
+    char id[5];
+    char gender[2];
+    char education[MAX_NAME_LENGTH];
+    int salesNum;
+
+    //读取到数组
+    while(fscanf(file1,"%s %s %s %s %d",id,name,gender,education,&salesNum)!=EOF){
+        addSalesmen(id, name, gender, education, salesNum);
+    }
+    fclose(file1);
+
+    //定义产品信息变量
+    //char id[5];
+    //char name[MAX_NAME_LENGTH];
+    int price;
+    int stock;
+    //定义销售额变量
+    //int salesNum;
+
+    //读取到数组
+    while(fscanf(file2,"%s %s %d %d %d",id,name,&price,&stock,&salesNum)!=EOF){
+        addProduct(id, name, price, stock, salesNum);
+    }
+    fclose(file2);
+
+    //定义销售信息变量
+    char date[MAX_NAME_LENGTH];
+    char saleID[5];
+    char salesmanID[5];
+    char productID[5];
+    int quantity;
+
+    //读取到数组
+    while(fscanf(file3,"%s %s %s %s %d",date,saleID,salesmanID,productID,&quantity)!=EOF){
+        addSalesRecord(date, saleID,salesmanID, productID, quantity);
+    }
+    fclose(file3);
+
+
+    printf("文件读取成功！\n");
+
+}
+
+//展示每个销售员的总销售额、每种产品的总销售额
+void showSalesNum(){
+
+    //先判断信息是否存在
+    if(num_salesmen==0){
+        printf("无销售人员信息！\n");
+        return;
+    }
+    if(num_product==0){
+        printf("无产品信息！\n");
+        return;
+    }
+
+    printf("每个销售人员的总销售额如下：\n");
+    for(int i=0;i<num_salesmen;i++){
+        printf("%s  %d\n",Salesmen[i].name,Salesmen[i].salesNum);
+    }
+    printf("\n");
+    printf("每种产品的总销售额如下：\n");
+    for(int i=0;i<num_product;i++){
+        printf("%s  %d\n",Product[i].name,Product[i].salesNum);
+    }
+
+    printf("打印成功！\n");
+
+}
+
+
+//定义一个比较函数（升序）
+int compareBySalesnumUp(const void *a,const void *b){
+    struct salesmen *salesman_a = (struct salesmen *)a;
+    struct salesmen *salesman_b = (struct salesmen *)b;
+    return (int)(salesman_a->salesNum-salesman_b->salesNum);
+}
+//按销售额对销售员进行升序排序，输出排序结果
+void sortMenBySalesNumUp(){
+
+    //先判断是否有销售人员信息
+    if(num_salesmen==0){
+        printf("无销售人员信息！\n");
+        return;
+    }
+
+    //使用快速排序
+    qsort(Salesmen,num_salesmen,sizeof(struct salesmen),compareBySalesnumUp);
+
+    showSalesmenInfo();
+
+    printf("按销售额对销售员进行升序排序成功！\n");
+}
+
+//定义一个比较函数（降序）
+int compareBySalesnumDown(const void *a,const void *b){
+    struct products *product_a = (struct products *)a;
+    struct products *product_b = (struct products *)b;
+    return (int)(product_b->salesNum - product_a->salesNum);
+}
+
+//按销售额对产品进行降序排序，输出排序结果
+void sortProductBySalesNumDown(){
+
+    //先判断是否有产品信息
+    if(num_product==0){
+        printf("无产品信息！\n");
+        return;
+    }
+
+    //使用快速排序
+    qsort(Product,num_product,sizeof(struct products),compareBySalesnumDown);
+
+    showProductInfo();
+
+    printf("按销售额对产品进行降序排序成功！\n");
+}
+
+int main()
+{
+    int choice;
+    while(1){
+        displayMenu();
+        scanf("%d",&choice);
+        switch(choice){
+            case 1:addSalesmenInfo();break;
+            case 2:showSalesmenInfo();break;
+            case 3:addProductInfo();break;
+            case 4:showProductInfo();break;
+            case 5:addSalesRecordsInfo();break;
+            case 6:showSalesRecordsInfo();break;
+            case 7:saveToFile();break;
+            case 8:readFromFile();break;
+            case 9:showSalesNum();break;
+            case 10:sortMenBySalesNumUp();break;
+            case 11:sortProductBySalesNumDown();break;
+            case 0:printf("结束运行！\n");exit(0);
+            default:printf("你输入的选项错误，请重新输入!\n");break;
+        }
+    }
+
+    return 0;
+    
+}
